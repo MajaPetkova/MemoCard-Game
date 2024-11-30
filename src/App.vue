@@ -21,24 +21,44 @@ export default {
     return {
       isPlaying: false,
       cards: structuredClone(CARDS),
+      matchedCards: [],
+      previousCardName: '',
     };
   },
   methods: {
     onStart() {
-      this.isPlaying = true
+      this.isPlaying = true;
+      this.cards = structuredClone(CARDS)
     },
     onStop() {
       this.isPlaying = false;
-      this.cards = CARDS;
+      this.cards = structuredClone(CARDS);
     },
     onFlip(cardId) {
-      // if (!this.isPlaying) return;
+      if (!this.isPlaying)
+        return;
+
+      const numberOfFlipped = this.cards.filter(card => card.isFlipped).length;
+      if (numberOfFlipped === 2) {
+        this.cards.forEach(card => card.isFlipped = false);
+      }
 
       const selectedCard = this.cards.find(x => x.id === cardId);
       if (!selectedCard)
         return;
+
       selectedCard.isFlipped = !selectedCard.isFlipped;
+
+      if (!this.previousCardName) {
+        this.previousCardName = selectedCard.name;
+        return;
+      }
+      if (this.previousCardName === selectedCard.name) {
+        this.matchedCards.push(selectedCard.name);
+      }
+      this.previousCardName = null;
     },
+
   },
 };
 </script>
@@ -50,7 +70,7 @@ export default {
 
     <div class="game-board">
       <AppCard v-for="card in cards" :id="card.id" :key="card.id" :url="card.image" :alt="card.name"
-        :is-flipped="card.isFlipped" @flip="onFlip" />
+        :is-flipped="card.isFlipped || matchedCards.includes(card.name)" @flip="onFlip" />
     </div>
   </div>
 </template>

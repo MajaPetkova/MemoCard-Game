@@ -1,5 +1,5 @@
 <script>
-const GAME_TIME = 4;
+const GAME_TIME = 65;
 let interval;
 
 export default {
