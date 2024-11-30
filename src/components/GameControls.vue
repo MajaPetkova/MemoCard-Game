@@ -39,6 +39,15 @@ export default {
             this.$emit('stop')
           
         }
+    },
+    watch:{
+        hasWon(newState){
+            if(newState){
+                clearInterval(interval);
+                this.secondsLeft=0;
+                this.$emit('stop')
+            }
+        }
     }
 }
 
