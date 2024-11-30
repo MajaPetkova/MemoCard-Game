@@ -7,6 +7,10 @@ export default {
         isPlaying: {
             type: Boolean,
             required: true
+        },
+        hasWon:{
+            type: Boolean,
+            required: true
         }
     },
     emits: ['start', 'stop'],
@@ -49,6 +53,7 @@ export default {
     </section>
     <h3 v-if="secondsLeft">Seconds Left: {{ secondsLeft}}</h3>
     <p v-if="hasLost">Sorry, you lost the game!</p>
+    <h2 v-if="hasWon">You Won!</h2>
 </template>
 <style scoped>
 .gameControls {

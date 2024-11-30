@@ -23,17 +23,34 @@ export default {
       cards: structuredClone(CARDS),
       matchedCards: [],
       previousCardName: '',
+      hasWon: false
     };
   },
+  watch: {
+    matchedCards: {
+      handler(newState) {
+        console.log('watcher' , newState)
+        if (newState.length === 3) {
+          this.hasWon = true;
+          this.resetState()
+        }
+      },
+      deep:true
+    }
+  },
   methods: {
-    onStart() {
-      this.isPlaying = true;
-      this.cards = structuredClone(CARDS)
-    },
-    onStop() {
+    resetState() {
       this.isPlaying = false;
       this.cards = structuredClone(CARDS);
+      this.matchedCards = [];
+      this.previousCardName = '';
     },
+    onStart() {
+      this.isPlaying = true;
+      this.hasWon = false;
+      this.cards = structuredClone(CARDS)
+    },
+ 
     onFlip(cardId) {
       if (!this.isPlaying)
         return;
@@ -66,7 +83,7 @@ export default {
 <template>
   <div class="memory-game-container">
     <h1>Memory Game</h1>
-    <GameControls :is-playing="isPlaying" @start="onStart" @stop="onStop" />
+    <GameControls :is-playing="isPlaying" @start="onStart" @stop="resetState" :hasWon="hasWon"/>
 
     <div class="game-board">
       <AppCard v-for="card in cards" :id="card.id" :key="card.id" :url="card.image" :alt="card.name"
