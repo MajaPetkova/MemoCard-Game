@@ -1,13 +1,16 @@
 <script>
 import AppCard from './components/AppCard.vue';
+import GameControls from './components/GameControls.vue';
 
 export default {
   name: 'MemoryGame',
   components: {
     AppCard,
+    GameControls
   },
   data() {
     return {
+      isPlaying: false,
       cards: [
         // Each card appears twice in the array for pairs
         { id: 1, name: 'Vue', image: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg', isFlipped: false, isMatched: false },
@@ -33,17 +36,13 @@ export default {
 <template>
   <div class="memory-game-container">
     <h1>Memory Game</h1>
+    <GameControls :is-playing="isPlaying"
+     @start="isPlaying = true"
+     @end="isPlaying = false" />
 
     <div class="game-board">
-      <AppCard
-        v-for="card in cards"
-        :id="card.id"
-        :key="card.id"
-        :url="card.image"
-        :alt="card.name"
-        :is-flipped="card.isFlipped"
-        @flip="onFlip"
-      />
+      <AppCard v-for="card in cards" :id="card.id" :key="card.id" :url="card.image" :alt="card.name"
+        :is-flipped="card.isFlipped" @flip="onFlip" />
     </div>
   </div>
 </template>
